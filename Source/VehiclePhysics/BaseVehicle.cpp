@@ -27,10 +27,10 @@ ABaseVehicle::ABaseVehicle()
 	AccelerationPoint->AttachToComponent(RootComponent, FAttachmentTransformRules(EAttachmentRule::KeepRelative, false));
 
 	// Add vehicle movement component
-	VehicleMoveComponent = CreateDefaultSubobject<UVehicleMovementComponent>(TEXT("VehicleMovementComponent"));
+	VehicleMoveComp = CreateDefaultSubobject<UVehicleMovementComponent>(TEXT("VehicleMovementComponent"));
 	////deprecated
-	//VehicleMoveComponent->SetVehicleMesh(VehicleMesh);
-	VehicleMoveComponent->SetPhysicsBoxCollider(BoxCollider);
+	//VehicleMoveComp->SetVehicleMesh(VehicleMesh);
+	VehicleMoveComp->SetPhysicsBoxCollider(BoxCollider);
 
 	// Create and add Wheels to mesh
 	Wheel1 = CreateDefaultSubobject<UWheel>(TEXT("Wheel1"));
@@ -43,10 +43,10 @@ ABaseVehicle::ABaseVehicle()
 	Wheel3->AttachToComponent(RootComponent, FAttachmentTransformRules(EAttachmentRule::KeepRelative, true));
 	Wheel4->AttachToComponent(RootComponent, FAttachmentTransformRules(EAttachmentRule::KeepRelative, true));
 
-	Wheel1->VehicleMovementComp = VehicleMoveComponent;
-	Wheel2->VehicleMovementComp = VehicleMoveComponent;
-	Wheel3->VehicleMovementComp = VehicleMoveComponent;
-	Wheel4->VehicleMovementComp = VehicleMoveComponent;
+	Wheel1->VehicleMovementComp = VehicleMoveComp;
+	Wheel2->VehicleMovementComp = VehicleMoveComp;
+	Wheel3->VehicleMovementComp = VehicleMoveComp;
+	Wheel4->VehicleMovementComp = VehicleMoveComp;
 
 	// Create wheel array
 	VehicleWheelArr.Emplace(Wheel1);
@@ -55,8 +55,8 @@ ABaseVehicle::ABaseVehicle()
 	VehicleWheelArr.Emplace(Wheel4);
 
 	// Give reference for wheels to VehicleMovementComponent
-	VehicleMoveComponent->SetVehicleWheels(VehicleWheelArr);
-	VehicleMoveComponent->AccelerationPoint = AccelerationPoint;
+	VehicleMoveComp->SetVehicleWheels(VehicleWheelArr);
+	VehicleMoveComp->AccelerationPoint = AccelerationPoint;
 }
 
 // Called when the game starts or when spawned
@@ -71,9 +71,9 @@ void ABaseVehicle::BeginPlay()
 	//VehicleMesh->SetMassOverrideInKg("NAME_None", 1500.0f, true);
 
 	// Set Vehicle Engine/Steering Properties
-	VehicleMoveComponent->HorsePower = HorsePower;
-	VehicleMoveComponent->SteeringPower = SteeringPower;
-	VehicleMoveComponent->SetDampingForces(LinearDamping, AngularDamping);
+	VehicleMoveComp->HorsePower = HorsePower;
+	VehicleMoveComp->SteeringPower = SteeringPower;
+	VehicleMoveComp->SetDampingForces(LinearDamping, AngularDamping);
 }
 
 // Called every frame
@@ -105,24 +105,24 @@ void ABaseVehicle::SetupPlayerInputComponent(UInputComponent* PlayerInputCompone
 
 void ABaseVehicle::AccelerateBrake(float Value)
 {
-	if (VehicleMoveComponent->WheelsGrounded() == 4)
+	if (VehicleMoveComp->WheelsGrounded() == 4)
 	{
 		//UKismetSystemLibrary::PrintString(this, "Vehicle is Grounded", true, true, FLinearColor(0.0f, 0.6f, 1.0f, 1.0f));
-		VehicleMoveComponent->Accelerate(Value);
+		VehicleMoveComp->Accelerate(Value);
 	}
 }
 
 void ABaseVehicle::TurnRight(float Value)
 {
 	//UKismetSystemLibrary::PrintString(this, "Turning Button pressed", true, true, FLinearColor(0.0f, 0.6f, 1.0f, 1.0f));
-	VehicleMoveComponent->Turn(Value);
+	VehicleMoveComp->Turn(Value);
 }
 
 void ABaseVehicle::ApplyUpwardImpulse()
 {
-	if (VehicleMoveComponent)
+	if (VehicleMoveComp)
 	{
-		VehicleMoveComponent->AddUpwardImpulse();
+		VehicleMoveComp->AddUpwardImpulse();
 	}
 	else
 	{

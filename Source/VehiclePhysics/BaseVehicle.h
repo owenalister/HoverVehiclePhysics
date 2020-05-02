@@ -70,7 +70,7 @@ public:
 	float SteeringPower;
 	
 	UPROPERTY(EditAnywhere, BlueprintReadOnly)
-	UVehicleMovementComponent* VehicleMoveComponent;
+	UVehicleMovementComponent* VehicleMoveComp;
 
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "CarEngine")
 	USceneComponent* AccelerationPoint;
